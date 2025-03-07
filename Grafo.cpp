@@ -16,6 +16,11 @@ void Grafo::removeEdge(int u, int v)
     listaAdjacencia[v].remove(u);
 }
 
+int Grafo::grau(int v)
+{
+    return listaAdjacencia[v].size();
+}
+
 const vector<list<int>> &Grafo::getListaAdjacencia()
 {
     return listaAdjacencia;
@@ -49,6 +54,23 @@ bool Grafo::isConexo()
         }
     }
 
+    return true;
+}
+
+bool Grafo::isEuleriano()
+{
+    int count = 0;
+    for (int i = 0; i < n; i++)
+    {
+        if (grau(i) % 2 != 0)
+        {
+            count++;
+            if (count > 2)
+            {
+                return false;
+            }
+        }
+    }
     return true;
 }
 

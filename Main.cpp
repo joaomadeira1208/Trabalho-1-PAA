@@ -1,5 +1,5 @@
 #include "Grafo.hpp"
-#include "Ponte.hpp"
+#include "Algoritmos.hpp"
 #include <iostream>
 #include <vector>
 #include <utility>
@@ -7,52 +7,42 @@
 
 using namespace std;
 
-Grafo gerarGrafoComPontes(int numVertices, int arestasExtras)
+Grafo gerarGrafoCiclo(int numVertices)
 {
-    srand(time(0));
+    Grafo grafo = Grafo(numVertices);
 
-    Grafo grafo(numVertices);
-    set<pair<int, int>> arestasExistentes;
-
-    for (int i = 1; i < numVertices; i++)
+    for (int i = 0; i < numVertices - 1; i++)
     {
-        int pai = rand() % i;
-        grafo.addEdge(i, pai);
-        arestasExistentes.insert({min(i, pai), max(i, pai)});
+        grafo.addEdge(i, i + 1);
     }
 
-    for (int i = 0; i < arestasExtras; i++)
-    {
-        int u, v;
-        do
-        {
-            u = rand() % numVertices;
-            v = rand() % numVertices;
-        } while (u == v || arestasExistentes.count({min(u, v), max(u, v)}) > 0);
-
-        grafo.addEdge(u, v);
-        arestasExistentes.insert({min(u, v), max(u, v)});
-    }
+    grafo.addEdge(numVertices - 1, 0);
 
     return grafo;
 }
 
 int main()
 {
-    Grafo grafo = gerarGrafoComPontes(4, 1);
+    Grafo grafo = gerarGrafoCiclo(100000);
 
-    grafo.print();
+    // grafo.print();
+    // cout << "----------" << endl;
 
-    cout << "----------" << endl;
+    Algoritmos algoritmos;
 
-    Ponte ponte;
-
-    vector<pair<int, int>> pontes = ponte.naive(grafo);
-
-    cout << "Pontes encontradas pelo método Naïve:" << endl;
-    for (auto bridge : pontes)
+    if (!grafo.isEuleriano())
     {
-        cout << "(" << bridge.first << ", " << bridge.second << ") é uma ponte." << endl;
+        cout << "Grafo Não Euleriano" << endl;
+        return 0;
+    }
+
+    cout << "Grafo Euleriano" << endl;
+
+    vector<int> euleriano = algoritmos.fleury(grafo);
+
+    for (int v : euleriano)
+    {
+        cout << v << " ";
     }
 
     return 0;

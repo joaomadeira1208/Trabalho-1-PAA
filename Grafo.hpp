@@ -18,9 +18,11 @@ public:
     Grafo(int n);
     void addEdge(int u, int v);
     void removeEdge(int u, int v);
+    int grau(int v);
     const vector<list<int>> &getListaAdjacencia();
     void DFS(int v, vector<bool> &visitado);
     bool isConexo();
+    bool isEuleriano();
     void print();
 };
 
