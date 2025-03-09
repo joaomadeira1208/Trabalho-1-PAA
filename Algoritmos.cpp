@@ -31,33 +31,6 @@ bool Algoritmos::naive(Grafo &grafo, int u, int v)
     return false;
 }
 
-// void Algoritmos::dfsTarjan(int vertice, int pai, Grafo &grafo, vector<bool> &visitado, vector<int> &tempoDescoberta, vector<int> &menorTempoAcessivel, int &tempoAtual, vector<pair<int, int>> &pontes)
-// {
-//     visitado[vertice] = true;
-//     tempoDescoberta[vertice] = menorTempoAcessivel[vertice] = tempoAtual++;
-
-//     for (int vizinho : grafo.getListaAdjacencia()[vertice])
-//     {
-//         if (vizinho == pai)
-//             continue;
-
-//         if (!visitado[vizinho])
-//         {
-//             dfsTarjan(vizinho, vertice, grafo, visitado, tempoDescoberta, menorTempoAcessivel, tempoAtual, pontes);
-//             menorTempoAcessivel[vertice] = min(menorTempoAcessivel[vertice], menorTempoAcessivel[vizinho]);
-
-//             if (menorTempoAcessivel[vizinho] > tempoDescoberta[vertice])
-//             {
-//                 pontes.push_back({vertice, vizinho});
-//             }
-//         }
-//         else
-//         {
-//             menorTempoAcessivel[vertice] = min(menorTempoAcessivel[vertice], tempoDescoberta[vizinho]);
-//         }
-//     }
-// }
-
 void Algoritmos::dfsTarjan(int vertice, int pai, Grafo &grafo, vector<bool> &visitado, vector<int> &tempoDescoberta, vector<int> &menorTempoAcessivel, int &tempoAtual, vector<pair<int, int>> &pontes)
 {
     stack<tuple<int, int, int>> pilha;
@@ -68,11 +41,11 @@ void Algoritmos::dfsTarjan(int vertice, int pai, Grafo &grafo, vector<bool> &vis
         auto [v, p, estado] = pilha.top();
         pilha.pop();
 
-        if (estado == 0) // Primeira vez visitando o vértice
+        if (estado == 0)
         {
             visitado[v] = true;
             tempoDescoberta[v] = menorTempoAcessivel[v] = tempoAtual++;
-            pilha.push({v, p, 1}); // Retorna a esse estado após percorrer os vizinhos
+            pilha.push({v, p, 1});
 
             for (int vizinho : grafo.getListaAdjacencia()[v])
             {
@@ -89,7 +62,7 @@ void Algoritmos::dfsTarjan(int vertice, int pai, Grafo &grafo, vector<bool> &vis
                 }
             }
         }
-        else // Pós-processamento
+        else
         {
             for (int vizinho : grafo.getListaAdjacencia()[v])
             {
@@ -185,10 +158,6 @@ vector<int> Algoritmos::fleury(Grafo &grafo)
             caminho.push_back(v);
             u = v;
         }
-
-        // count++;
-        // if (count > limite)
-        //     break;
     }
 
     return caminho;
@@ -223,7 +192,7 @@ vector<int> Algoritmos::fleuryTarjan(Grafo &grafo)
         bool todasArestasPontes = true;
         for (int v : vizinhos)
         {
-            pair<int, int> aresta = {min(u, v), max(u, v)}; // aresta ordenada p/ busca eficiente em pontesSet
+            pair<int, int> aresta = {min(u, v), max(u, v)};
             if (grafo.grau(u) != 1)
             {
                 vector<pair<int, int>> pontes = tarjan(grafo);
@@ -255,7 +224,6 @@ vector<int> Algoritmos::fleuryNaive(Grafo &grafo)
     int numVertices = grafo.getListaAdjacencia().size();
     int u = 0;
 
-    // Encontrar vértice inicial (se houver vértices ímpares)
     for (int i = 0; i < numVertices; i++)
     {
         if (grafo.grau(i) % 2 == 1)
@@ -277,7 +245,7 @@ vector<int> Algoritmos::fleuryNaive(Grafo &grafo)
         for (int v : vizinhos)
         {
             if (!naive(grafo, u, v) || grafo.grau(u) == 1)
-            { // naive retorna false se a aresta for ponte
+            {
                 grafo.removeEdge(u, v);
                 caminho.push_back(v);
                 u = v;
