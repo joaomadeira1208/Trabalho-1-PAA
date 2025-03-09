@@ -20,8 +20,8 @@ public:
     void removeEdge(int u, int v);
     int grau(int v);
     const vector<list<int>> &getListaAdjacencia();
-    void DFS(int v, vector<bool> &visitado);
-    bool isConexo();
+    bool DFS(int v, int destino, vector<bool> &visitado);
+    bool isConexo(int origem, int destino);
     bool isEuleriano();
     void print();
 };

@@ -1,4 +1,5 @@
 #include "Grafo.hpp"
+#include <stack>
 
 using namespace std;
 
@@ -26,35 +27,70 @@ const vector<list<int>> &Grafo::getListaAdjacencia()
     return listaAdjacencia;
 }
 
-void Grafo::DFS(int v, vector<bool> &visitado)
+// void Grafo::DFS(int v, vector<bool> &visitado)
+// {
+//     visitado[v] = true;
+//     for (int vizinho : listaAdjacencia[v])
+//     {
+//         if (!visitado[vizinho])
+//         {
+//             DFS(vizinho, visitado);
+//         }
+//     }
+// }
+
+// bool Grafo::isConexo()
+// {
+//     vector<bool> visitado(n, false);
+
+//     int inicio = 0;
+
+//     DFS(inicio, visitado);
+
+//     for (int i = 0; i < n; i++)
+//     {
+//         if (!visitado[i])
+//         {
+//             return false;
+//         }
+//     }
+
+//     return true;
+// }
+
+bool Grafo::DFS(int v, int destino, vector<bool> &visitado)
 {
-    visitado[v] = true;
-    for (int vizinho : listaAdjacencia[v])
+    stack<int> pilha;
+    pilha.push(v);
+
+    while (!pilha.empty())
     {
-        if (!visitado[vizinho])
+        int vertice = pilha.top();
+        pilha.pop();
+
+        if (!visitado[vertice])
         {
-            DFS(vizinho, visitado);
+            visitado[vertice] = true;
+
+            if (vertice == destino)
+                return true;
+
+            for (int vizinho : listaAdjacencia[vertice])
+            {
+                if (!visitado[vizinho])
+                {
+                    pilha.push(vizinho);
+                }
+            }
         }
     }
+    return false;
 }
 
-bool Grafo::isConexo()
+bool Grafo::isConexo(int origem, int destino)
 {
     vector<bool> visitado(n, false);
-
-    int inicio = 0;
-
-    DFS(inicio, visitado);
-
-    for (int i = 0; i < n; i++)
-    {
-        if (!visitado[i])
-        {
-            return false;
-        }
-    }
-
-    return true;
+    return DFS(origem, destino, visitado);
 }
 
 bool Grafo::isEuleriano()
