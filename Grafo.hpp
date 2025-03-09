@@ -18,12 +18,13 @@ public:
     Grafo(int n);
     void addEdge(int u, int v);
     void removeEdge(int u, int v);
-    int grau(int v);
-    const vector<list<int>> &getListaAdjacencia();
+    const int grau(int v) const;
+    const vector<list<int>> &getListaAdjacencia() const;
     bool DFS(int v, int destino, vector<bool> &visitado);
     bool isConexo(int origem, int destino);
     bool isEuleriano();
     void print();
+    bool hasEdge(int u, int v);
 };
 
 #endif

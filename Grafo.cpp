@@ -1,5 +1,6 @@
 #include "Grafo.hpp"
 #include <stack>
+#include <algorithm>
 
 using namespace std;
 
@@ -7,6 +8,7 @@ Grafo::Grafo(int n) : n(n), listaAdjacencia(n) {}
 
 void Grafo::addEdge(int u, int v)
 {
+
     listaAdjacencia[u].push_back(v);
     listaAdjacencia[v].push_back(u);
 }
@@ -17,12 +19,17 @@ void Grafo::removeEdge(int u, int v)
     listaAdjacencia[v].remove(u);
 }
 
-int Grafo::grau(int v)
+bool Grafo::hasEdge(int u, int v)
+{
+    return std::find(listaAdjacencia[u].begin(), listaAdjacencia[u].end(), v) != listaAdjacencia[u].end();
+}
+
+const int Grafo::grau(int v) const
 {
     return listaAdjacencia[v].size();
 }
 
-const vector<list<int>> &Grafo::getListaAdjacencia()
+const vector<list<int>> &Grafo::getListaAdjacencia() const
 {
     return listaAdjacencia;
 }

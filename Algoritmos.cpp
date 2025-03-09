@@ -143,8 +143,12 @@ vector<int> Algoritmos::fleury(Grafo &grafo)
     vector<int> caminho;
     caminho.push_back(u);
 
+    int limite = 10;
+    int count = 0;
+
     while (true)
     {
+
         if (grafo.grau(u) == 0)
         {
             caminho.pop_back();
@@ -160,18 +164,31 @@ vector<int> Algoritmos::fleury(Grafo &grafo)
             continue;
         }
 
+        bool todasArestasPontes = true;
+
         for (int v : vizinhos)
         {
-            if (grafo.grau(u) == 1 || !naive(grafo, u, v))
+            if (!naive(grafo, u, v))
             {
+                todasArestasPontes = false;
                 grafo.removeEdge(u, v);
                 caminho.push_back(v);
                 u = v;
                 break;
             }
-
-            grafo.addEdge(u, v);
         }
+
+        if (todasArestasPontes)
+        {
+            int v = vizinhos.front();
+            grafo.removeEdge(u, v);
+            caminho.push_back(v);
+            u = v;
+        }
+
+        // count++;
+        // if (count > limite)
+        //     break;
     }
 
     return caminho;
